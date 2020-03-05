@@ -10,23 +10,22 @@
 
 
 void bucketSort(unsigned int* I, unsigned int* V, std::string S);
+void setGroupLengths(unsigned int* V, int* L, unsigned int len);
 
-void setGroupLengths(unsigned int* I, unsigned int* V, int* L, unsigned int len) {
-    unsigned int i = 1;
-    while (i < len) {
-
-    }
-}
 
 
 
 int main()
 {
-
+    bool debug = true;
 
     //Path for text file 230,481,013 chars long
     std::string text_path = "C:\\Users\\Daniel\\Desktop\\hu-chr1.txt";
-    const unsigned long len = 230481014;
+    //const unsigned long len = 230481014;
+
+    //test constructs
+    const unsigned long len = 13;
+    std::string testS = "ACTGTGAGGGAC$";
 
 
     //Define alphabet order
@@ -44,8 +43,8 @@ int main()
     std::ifstream fin(text_path);
     fin.read(buffer, buffer_size);
 
-    std::string S(buffer, len);
-    S = S + "$";
+    //std::string S(buffer, len);
+    //S = S + "$";
     delete[] buffer;
 
     unsigned int* I = (unsigned int*) calloc(len, sizeof(int));
@@ -53,9 +52,24 @@ int main()
     int* L = (int*) calloc(len,sizeof(int));
 
     //loads initial values into I and V
-    bucketSort(I, V, S);
+    bucketSort(I, V, testS);
+    setGroupLengths(V, L, len);
 
-    
+    if (debug) {
+        for (int i = 0; i < len; i++) {
+            std::cout << testS[I[i]];
+        }
+        std::cout << std::endl;
+        for (int i = 0; i < len; i++) {
+            std::cout << V[i];
+        }
+        std::cout << std::endl;
+        for (int i = 0; i < len; i++) {
+            std::cout << L[i];
+        }
+        std::cout << std::endl;
+    }
+
 }
 
 
@@ -122,20 +136,39 @@ void bucketSort(unsigned int* I, unsigned int* V, std::string S) {
 
     for (unsigned int i = 1; i < len; i++) {
         if (i < A) {
-            V[i] = A;
+            V[i] = A-1;
         }
         else if (i < C) {
-            V[i] = C;
+            V[i] = C-1;
         }
         else if (i < G) {
-            V[i] = G;
+            V[i] = G-1;
         }
         else {
-            V[i] = T;
+            V[i] = T-1;
         }
     }
 
 }
 
+void setGroupLengths( unsigned int* V, int* L, unsigned int len) {
+    unsigned int i = 1;
+    while (i < len) {
+        int g = V[i];
+        if (g == i) {
+            int temp = i;
+            while (g == V[i]) {
+                g++;
+                i++;
+            }
+            L[temp] = temp - (g - 1) - 1;
+        }
+        else {
+            L[i] = g - i + 1;
+            //std::cout << "Setting group length at " << i << " to " << g - i + 1 << std::endl;
+            i = g + 1;
+        }
+    }
+}
 
 
