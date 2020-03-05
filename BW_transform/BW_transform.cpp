@@ -9,76 +9,22 @@
 
 
 
-void bucketSort(int* I, std::string S) {
-    unsigned long A = 0;
-    unsigned long C = 0;
-    unsigned long G = 0;
-    unsigned long T = 0;
+void bucketSort(unsigned int* I, unsigned int* V, std::string S);
 
-    unsigned long len = S.length();
+void setGroupLengths(unsigned int* I, unsigned int* V, int* L, unsigned int len) {
+    unsigned int i = 1;
+    while (i < len) {
 
-    for (unsigned long i = 0; i < len; i++) {
-        char c = S[i];
-        if (c == 'A') {
-            A++;
-        }
-        else if (c == 'C') {
-            C++;
-        }
-        else if (c == 'G') {
-            G++;
-        }
-        else if (c == 'T') {
-            T++;
-        }
-        else {
-            std::cout << "One dolla " << std::endl;
-        }
     }
-    T = A + C + G + 1;
-    G = A + C + 1;
-    C = A + 1;
-    A = 1;
-
-    //std::cout << A << C << G << T << std::endl;
-
-    I[0] = len - 1;
-
-    for (unsigned long i = 0; i < len-1; i++) {
-        char c = S[i];
-        if (c == 'A') {
-            I[A] = i;
-            A++;
-        }
-        else if (c == 'C') {
-            I[C] = i;
-            C++;
-        }
-        else if (c == 'G') {
-            I[G] = i;
-            G++;
-        }
-        else if (c == 'T') {
-            I[T] = i;
-            T++;
-        }
-        else {
-            std::cout << "Bucket Sort Error: Unknown char" << std::endl;
-        }
-    }
-    
-
-
 }
 
-void ternaryQuickSort()
 
 
 int main()
 {
 
 
-    //Path for text file 230481013 chars long
+    //Path for text file 230,481,013 chars long
     std::string text_path = "C:\\Users\\Daniel\\Desktop\\hu-chr1.txt";
     const unsigned long len = 230481014;
 
@@ -102,22 +48,94 @@ int main()
     S = S + "$";
     delete[] buffer;
 
-    int* I = (int*)malloc(len);
-    int* V = (int*)malloc(len);
-    int* L = (int*)malloc(len);
+    unsigned int* I = (unsigned int*) calloc(len, sizeof(int));
+    unsigned int* V = (unsigned int*)calloc(len, sizeof(int));
+    int* L = (int*) calloc(len,sizeof(int));
 
-    bucketSort(I, S);
+    //loads initial values into I and V
+    bucketSort(I, V, S);
 
     
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+void bucketSort(unsigned int* I, unsigned int* V, std::string S) {
+    unsigned int A = 0;
+    unsigned int C = 0;
+    unsigned int G = 0;
+    unsigned int T = 0;
+
+    unsigned int len = S.length();
+
+    for (unsigned int i = 0; i < len-1; i++) {
+        char c = S[i];
+        if (c == 'A') {
+            A++;
+        }
+        else if (c == 'C') {
+            C++;
+        }
+        else if (c == 'G') {
+            G++;
+        }
+        else if (c == 'T') {
+            T++;
+        }
+        else {
+            std::cout << "Unknown char " << std::endl;
+        }
+    }
+    T = A + C + G + 1;
+    G = A + C + 1;
+    C = A + 1;
+    A = 1;
+
+    //std::cout << A << C << G << T << std::endl;
+
+    I[0] = len - 1;
+
+    for (unsigned int i = 0; i < len - 1; i++) {
+        char c = S[i];
+        if (c == 'A') {
+            I[A] = i;
+            A++;
+        }
+        else if (c == 'C') {
+            I[C] = i;
+            C++;
+        }
+        else if (c == 'G') {
+            I[G] = i;
+            G++;
+        }
+        else if (c == 'T') {
+            I[T] = i;
+            T++;
+        }
+        else {
+            std::cout << "Bucket Sort Error: Unknown char" << std::endl;
+        }
+    }
+
+
+    V[0] = 0;
+
+    for (unsigned int i = 1; i < len; i++) {
+        if (i < A) {
+            V[i] = A;
+        }
+        else if (i < C) {
+            V[i] = C;
+        }
+        else if (i < G) {
+            V[i] = G;
+        }
+        else {
+            V[i] = T;
+        }
+    }
+
+}
+
+
+
